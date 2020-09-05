@@ -1,3 +1,6 @@
 
 notebooks/alphanum_classifier.model
 notebooks/shape_classifier.model
+training_data/bounding_box_X.pickle
+training_data/bounding_box_y.pickle
+notebooks/bounding_box.model/variables/variables.data-00000-of-00001
