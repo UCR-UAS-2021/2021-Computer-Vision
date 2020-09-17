@@ -2,7 +2,7 @@
  "cells": [
   {
    "cell_type": "code",
-   "execution_count": 1,
+   "execution_count": 3,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -15,7 +15,7 @@
     "from tqdm import tqdm\n",
     "from enum import Enum\n",
     "\n",
-    "os.environ[\"CUDA_VISIBLE_DEVICES\"] = \"-1\"\n",
+    "# os.environ[\"CUDA_VISIBLE_DEVICES\"] = \"-1\"\n",
     "\n",
     "from keras.models import Sequential, load_model\n",
     "from keras.layers import BatchNormalization, Conv2D, MaxPooling2D, Activation, \\\n",
@@ -23,6 +23,7 @@
     "from keras import backend as K\n",
     "from keras.preprocessing.image import ImageDataGenerator, img_to_array\n",
     "from keras.optimizers import Adam\n",
+    "import tensorflow as tf\n",
     "\n",
     "from sklearn.preprocessing import LabelBinarizer\n",
     "from sklearn.model_selection import train_test_split\n",
@@ -35,7 +36,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 2,
+   "execution_count": 4,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -46,14 +47,23 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 3,
+   "execution_count": 5,
    "metadata": {},
    "outputs": [],
    "source": [
+<<<<<<< Updated upstream
     "EPOCHS = 8\n",
     "INIT_LR = 1e-3\n",
+=======
+    "EPOCHS = 32\n",
+    "INIT_LR = 1e-4\n",
+>>>>>>> Stashed changes
     "BS = 32\n",
-    "IMAGE_DIMS = (96, 96, 1)\n",
+    "IMAGE_DIMS = (96, 96, 3)\n",
+    "\n",
+    "WARMUP_EPOCHS = 4\n",
+    "SAMPLE_COUNT = len(os.listdir(img_path))\n",
+    "WARMUP_BATCHES = WARMUP_EPOCHS * SAMPLE_COUNT / BS\n",
     "\n",
     "data = []\n",
     "labels = []\n",
@@ -62,7 +72,49 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 4,
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "class WarmUpLearningRateScheduler(tf.keras.callbacks.Callback):\n",
+    "    \"\"\"Warmup learning rate scheduler\n",
+    "    \"\"\"\n",
+    "\n",
+    "    def __init__(self, warmup_batches, init_lr, verbose=0):\n",
+    "        \"\"\"Constructor for warmup learning rate scheduler\n",
+    "\n",
+    "        Arguments:\n",
+    "            warmup_batches {int} -- Number of batch for warmup.\n",
+    "            init_lr {float} -- Learning rate after warmup.\n",
+    "\n",
+    "        Keyword Arguments:\n",
+    "            verbose {int} -- 0: quiet, 1: update messages. (default: {0})\n",
+    "        \"\"\"\n",
+    "\n",
+    "        super(WarmUpLearningRateScheduler, self).__init__()\n",
+    "        self.warmup_batches = warmup_batches\n",
+    "        self.init_lr = init_lr\n",
+    "        self.verbose = verbose\n",
+    "        self.batch_count = 0\n",
+    "        self.learning_rates = []\n",
+    "\n",
+    "    def on_batch_end(self, batch, logs=None):\n",
+    "        self.batch_count = self.batch_count + 1\n",
+    "        lr = K.get_value(self.model.optimizer.lr)\n",
+    "        self.learning_rates.append(lr)\n",
+    "\n",
+    "    def on_batch_begin(self, batch, logs=None):\n",
+    "        if self.batch_count <= self.warmup_batches:\n",
+    "            lr = self.batch_count*self.init_lr/self.warmup_batches\n",
+    "            K.set_value(self.model.optimizer.lr, lr)\n",
+    "            if self.verbose > 0:\n",
+    "                print('\\nBatch %05d: WarmUpLearningRateScheduler setting learning '\n",
+    "                      'rate to %s.' % (self.batch_count + 1, lr))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -79,7 +131,7 @@
     "        image = cv2.resize(image, (img_size, img_size))\n",
     "        \n",
     "        # try with cv.Canny()\n",
-    "        image = cv2.Canny(image, 100, 200)\n",
+    "#         image = cv2.Canny(image, 100, 200)\n",
     "        image = img_to_array(image)\n",
     "        training_data.append(image)\n",
     "        \n",
@@ -100,7 +152,11 @@
   },
   {
    "cell_type": "code",
+<<<<<<< Updated upstream
    "execution_count": 25,
+=======
+   "execution_count": null,
+>>>>>>> Stashed changes
    "metadata": {},
    "outputs": [],
    "source": [
@@ -111,6 +167,7 @@
     "    if K.image_data_format == \"channels_first\":\n",
     "        chan_dim = 1\n",
     "        \n",
+<<<<<<< Updated upstream
     "    model.add(Conv2D(32, (3, 3), padding=\"same\", input_shape=input_shape))\n",
     "    model.add(Activation(\"relu\"))\n",
     "#     model.add(BatchNormalization(axis=chan_dim))\n",
@@ -122,22 +179,40 @@
     "    model.add(Conv2D(64, (3, 3), padding=\"same\"))\n",
     "    model.add(Activation(\"relu\"))\n",
     "#     model.add(BatchNormalization(axis=chan_dim))\n",
+=======
+    "    model.add(Conv2D(32, (5, 5), padding=\"same\", input_shape=input_shape, activation=\"relu\"))\n",
+    "    model.add(Dropout(0.25))\n",
+    "\n",
+    "    model.add(Conv2D(64, (3, 3), padding=\"same\", activation=\"relu\"))\n",
+    "    model.add(Conv2D(128, (3, 3), padding=\"same\", activation=\"relu\"))\n",
+>>>>>>> Stashed changes
     "    model.add(MaxPooling2D(pool_size=(2, 2)))\n",
     "#     model.add(Dropout(0.25))\n",
     "\n",
+<<<<<<< Updated upstream
     "    model.add(Conv2D(128, (3, 3), padding=\"same\"))\n",
     "    model.add(Activation(\"relu\"))\n",
     "#     model.add(BatchNormalization(axis=chan_dim))\n",
     "    model.add(Conv2D(128, (3, 3), padding=\"same\"))\n",
     "    model.add(Activation(\"relu\"))\n",
+=======
+    "    model.add(Conv2D(256, (3, 3), padding=\"same\", activation=\"relu\"))\n",
+    "#     model.add(BatchNormalization(axis=chan_dim))\n",
+    "    model.add(Conv2D(512, (3, 3), padding=\"same\", activation=\"relu\"))\n",
+>>>>>>> Stashed changes
     "#     model.add(BatchNormalization(axis=chan_dim))\n",
     "    model.add(MaxPooling2D(pool_size=(2, 2)))\n",
     "#     model.add(Dropout(0.25))\n",
     "\n",
     "    model.add(Flatten())\n",
+<<<<<<< Updated upstream
     "    model.add(Dense(1024))\n",
     "    model.add(Activation(\"relu\"))\n",
     "#     model.add(BatchNormalization())\n",
+=======
+    "    model.add(Dense(1024, activation=\"relu\"))\n",
+    "    model.add(BatchNormalization())\n",
+>>>>>>> Stashed changes
     "    model.add(Dropout(0.5))\n",
     "\n",
     "    model.add(Dense(classes))\n",
@@ -149,17 +224,21 @@
   },
   {
    "cell_type": "code",
+<<<<<<< Updated upstream
    "execution_count": 26,
+=======
+   "execution_count": null,
+>>>>>>> Stashed changes
    "metadata": {},
    "outputs": [],
    "source": [
     "def model_training_data():\n",
     "    (xTrain, xTest, yTrain, yTest) = train_test_split(data, labels, test_size=0.2, random_state=27)\n",
     "    \n",
-    "    aug = ImageDataGenerator(rotation_range=25, width_shift_range=0.1, height_shift_range=0.1, \\\n",
-    "                             shear_range=0.2, zoom_range=0.2, fill_mode=\"nearest\")\n",
+    "#     aug = ImageDataGenerator(rotation_range=25, width_shift_range=0.1, height_shift_range=0.1, \\\n",
+    "#                              shear_range=0.2, zoom_range=0.2, fill_mode=\"nearest\")\n",
     "    \n",
-    "    model = create_model(96,96,1, len(lb.classes_))\n",
+    "    model = create_model(96,96,3, len(lb.classes_))\n",
     "    opt = Adam(lr=INIT_LR, decay=INIT_LR / EPOCHS)\n",
     "    \n",
     "    model.compile(loss=\"categorical_crossentropy\", optimizer=opt, metrics=[\"accuracy\"])\n",
@@ -169,31 +248,35 @@
     "              epochs=EPOCHS, verbose=1)\n",
     "    \n",
     "    print(\"SAVING MODEL...\")\n",
-    "    model.save('alphanum_classifier.model', save_format=\"h5\")\n",
+    "    model.save('alphanum_classifier.model')\n",
     "    f = open(r\"../training_data/alphanum.pickle\", \"wb\")\n",
     "    f.write(pickle.dumps(lb))\n",
-    "    f.close()"
+    "    f.close()\n",
+    "    print(\"MODEL SAVED\")"
    ]
   },
   {
    "cell_type": "code",
+<<<<<<< Updated upstream
    "execution_count": 27,
+=======
+   "execution_count": 8,
+>>>>>>> Stashed changes
    "metadata": {},
    "outputs": [],
    "source": [
-    "def test_model(imagePath):\n",
+    "def test_model(imagePath, loaded_model):\n",
     "    image = cv2.imread(imagePath)\n",
     "    \n",
     "    image = cv2.resize(image, (96, 96))\n",
-    "    iamge = cv2.Canny(image, 100, 200)\n",
+    "#     iamge = cv2.Canny(image, 100, 200)\n",
     "    image = image.astype(\"float\") /  255.0\n",
     "    image = img_to_array(image)\n",
     "    image = np.expand_dims(image, axis=0)\n",
-    "    print(image.shape)\n",
     "    lb = pickle.loads(open('../training_data/alphanum.pickle', 'rb').read())\n",
     "    \n",
     "    print(\"Classifying Image...\")\n",
-    "    prediction = model.predict(image)[0]\n",
+    "    prediction = loaded_model.predict(image)[0]\n",
     "    idx = np.argmax(prediction)\n",
     "    label = lb.classes_[idx]\n",
     "    \n",
@@ -203,6 +286,7 @@
   },
   {
    "cell_type": "code",
+<<<<<<< Updated upstream
    "execution_count": 28,
    "metadata": {},
    "outputs": [
@@ -210,23 +294,48 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
+<<<<<<< Updated upstream
+      "100%|███████████████████████████████████████████████████████████████████████████████| 200/200 [00:00<00:00, 208.58it/s]"
+=======
+<<<<<<< Updated upstream
+      "100%|███████████████████████████████████████████████████████████████████████████████| 200/200 [00:00<00:00, 227.01it/s]\n"
+=======
       "100%|█████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:01<00:00, 507.61it/s]\n"
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
      ]
     },
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
+<<<<<<< Updated upstream
+      "[INFO] data matrix: 14.40MB\n"
+=======
       "[INFO] data matrix: 72.00MB\n"
+>>>>>>> Stashed changes
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "\n"
      ]
     }
    ],
+=======
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+>>>>>>> Stashed changes
    "source": [
     "create_training_data(img_path, json_path, 96)"
    ]
   },
   {
    "cell_type": "code",
+<<<<<<< Updated upstream
    "execution_count": null,
    "metadata": {},
    "outputs": [
@@ -278,7 +387,9 @@
       "_________________________________________________________________\n",
       "TRAINING NETWORK...\n",
       "Epoch 1/8\n",
-      " 3/25 [==>...........................] - ETA: 1:25 - loss: 3.6052 - accuracy: 0.0417"
+      "25/25 [==============================] - 166s 7s/step - loss: 3.5872 - accuracy: 0.0375 - val_loss: 3.5857 - val_accuracy: 0.0350\n",
+      "Epoch 2/8\n",
+      "17/25 [===================>..........] - ETA: 50s - loss: 3.5821 - accuracy: 0.0386"
      ]
     }
    ],
@@ -288,10 +399,13 @@
   },
   {
    "cell_type": "code",
+=======
+>>>>>>> Stashed changes
    "execution_count": null,
    "metadata": {},
    "outputs": [],
    "source": [
+<<<<<<< Updated upstream
     "print('check')"
    ]
   },
@@ -315,20 +429,27 @@
    "source": [
     "test_model('../../ImageGenerator/Targets/500.png')\n",
     "plt.imshow(cv2.imread('../../ImageGenerator/Targets/.png'), cmap=plt.cm.binary)"
+=======
+    "model_training_data()"
+>>>>>>> Stashed changes
    ]
   },
   {
    "cell_type": "code",
+<<<<<<< Updated upstream
    "execution_count": null,
+=======
+   "execution_count": 6,
+>>>>>>> Stashed changes
    "metadata": {},
    "outputs": [],
    "source": [
-    "model = load_model('alphanum_classifier.model')\n",
-    "lb = pickle.loads(open('../training_data/alphanum.pickle', 'rb').read())"
+    "model = load_model('alphanum_classifier.model')"
    ]
   },
   {
    "cell_type": "code",
+<<<<<<< Updated upstream
    "execution_count": null,
    "metadata": {},
    "outputs": [],
@@ -495,6 +616,49 @@
    ],
    "source": [
     "print(data[298])"
+=======
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Classifying Image...\n",
+      "RESULT:  1\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "<matplotlib.image.AxesImage at 0x177809d75c8>"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "test_flight = '../foamie_test_frames/rect.png'\n",
+    "gen_img = r'..\\..\\ImageGenerator\\Targets\\544.png'\n",
+    "test_model(gen_img, model)\n",
+    "img = cv2.imread(gen_img)\n",
+    "plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))"
+>>>>>>> Stashed changes
    ]
   },
   {
