@@ -1,32 +1,28 @@
 import socket
+import os
 
-HOST = '192.168.1.5' # Server IP or Hostname
-PORT = 65432 #1000+ recoommended
+# Had to hardcode the image path to make it work properly
+image_path = os.path.expanduser("~/Development/2021-Computer-Vision/scripts/socket/image.png")
+
+# Server IP or Hostname
+HOST = '192.168.1.5'
+
+#1000+ recoommended
+PORT = 65432
+
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.connect((HOST,PORT))
 
 while True:
-	command = input('Enter your command: ')
+	f = open(image_path, 'rb')
+	data = f.read(1024)
 
-	sock.send(bytes(command, "utf-8"))
-
-	reply = sock.recv(1024)
-	reply = reply.decode("utf-8")
-
-	if reply == 'Quitting...':
-		print("Quitting...")
-		break
-	elif reply == 'Send the Image':
-		f = open('file.png', 'rb')
+	while (data):
+		print('Sending Image...')
+		sock.send(data)
 		data = f.read(1024)
-
-		while (data):
-			print('Sending Image...')
-			sock.send(data)
-			data = f.read(1024)
-		f.close()
-		print('Image sent!')
-		sock.close()
-		break
-
+	f.close()
+	print('Image sent!')
+	sock.close()
+	break
 sock.close()
