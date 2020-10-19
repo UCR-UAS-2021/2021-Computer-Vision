@@ -1,4 +1,5 @@
-
+scripts/tesseract/IMG_0602.JPG
+scripts/tesseract/0.png
 notebooks/alphanum_classifier.model
 notebooks/shape_classifier.model
 training_data/bounding_box_X.pickle
