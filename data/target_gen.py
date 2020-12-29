@@ -24,12 +24,12 @@ def create_target_image(target):
     shape_color_bgr = target.color_shape
     letter_color_bgr = target.color_alphanum
 
-    letter_file = 'data/Letters/' + target.alphanumeric + '.png'
+    letter_file = 'Letters/' + target.alphanumeric + '.png'
     png_letter = cv2.imread(letter_file, cv2.IMREAD_UNCHANGED)
     letter_filter = cv2.inRange(png_letter, (100, 0, 0), (255, 255, 255))
 
     img_letter = np.repeat(letter_filter[:, :, np.newaxis], 4, axis=2)
-    png_shape = cv2.imread('data/Shapes/' + str(target.shape.value) + '.png', cv2.IMREAD_UNCHANGED)
+    png_shape = cv2.imread('Shapes/' + str(target.shape.value) + '.png', cv2.IMREAD_UNCHANGED)
 
     # shape_rotation = (randint(0, 3)) * 90
     # rows, cols, _ = png_shape.shape
