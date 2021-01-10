@@ -9,6 +9,8 @@ def find_contours(img, orig_img):
         if cv2.contourArea(c) <= 500 or cv2.contourArea(c) >= 6000:
             continue
         x, y, w, h = cv2.boundingRect(c)
+        if w > h * 1.5 or w < h / 1.5:
+            continue
         cv2.rectangle(orig_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
         # center = (x, y)
         # print(center)
