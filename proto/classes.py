@@ -46,7 +46,6 @@ class Target:
                  shape_color: Color,
                  posx: int,
                  posy: int,
-                 scale: int,
                  rotation: int,
                  height: int,
                  width: int):
@@ -56,7 +55,6 @@ class Target:
         self.color_shape = shape_color
         self.x = posx
         self.y = posy
-        self.scale = scale
         self.rotation = rotation
         self.height = height
         self.width = width
@@ -70,7 +68,6 @@ class Target:
                 "x": self.x,
                 "y": self.y,
                 "rotation": self.rotation,
-                "scale": self.scale,
                 "width": self.width,
                 "height": self.height
         }
@@ -88,6 +85,8 @@ class Target:
 
         return dumps(data, indent=2)
 
+    def print(self):
+        print(self.x, self.y, self.alphanumeric, self.shape, self.color_alphanum, self.color_shape)
 
 def nearest_color(color: str) -> Color:
     return min(color_dict, key=lambda x: np.linalg.norm(np.subtract(color, hex_to_bgr(x))))
