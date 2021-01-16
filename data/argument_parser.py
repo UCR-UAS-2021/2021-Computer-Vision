@@ -22,7 +22,7 @@ def parse_image():
 
 
 def parse_target():
-    parser = argparse.ArgumentParser(description='Target image generator to train the object classification model for '
+    parser = argparse.ArgumentParser(description='Target image generator to train the object classify model for '
                                                  'UCRUAS 2020-2021')
     parser.add_argument('num_targets', metavar='num_targets', type=int,
                         help='number of targets to write to file. Written in .png')
