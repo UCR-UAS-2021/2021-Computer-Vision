@@ -21,7 +21,7 @@ if __name__ == "__main__":
     target_list = []
     while (True):
         ret, img = cap.read()
-        #img = cv2.imread('./data/images/0.png')
+        # img = cv2.imread('./data/images/0.png')
 
         contour_list = detector.detect_targets(img)
         img_list = []
@@ -34,9 +34,11 @@ if __name__ == "__main__":
         process = blur_image(img)
         process = find_edge(process)
         process = morphology(process)
+        morph = process
         process = find_contours(process, img)
         # Display the resulting frame
         cv2.imshow('contours', img)
+        # cv2.imshow('binary', morph)
         # for i in target_list:
         #     i.print()
         print(len(target_list))
