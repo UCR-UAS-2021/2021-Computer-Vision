@@ -7,6 +7,6 @@ def find_edge(img):
 
 
 def morphology(img):
-    kernel = np.ones((19, 19))
-    return cv2.dilate(img, kernel, iterations=1)
+    kernel = np.ones((6, 6))
+    return cv2.dilate(img, kernel, iterations=2)
 
