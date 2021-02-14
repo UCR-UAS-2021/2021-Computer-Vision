@@ -1,10 +1,10 @@
 import cv2
-from cv.detection import detector
-from cv.detection.preprocessing.blur import blur_image
-from cv.detection.preprocessing.bitmap import find_edge
-from cv.detection.preprocessing.bitmap import morphology
-from cv.detection.preprocessing.contour import find_contours
-from cv.classify import classifier
+from detection import detector
+from detection.preprocessing.blur import blur_image
+from detection.preprocessing.bitmap import find_edge
+from detection.preprocessing.bitmap import morphology
+from detection.preprocessing.contour import find_contours
+from classify import classifier
 
 
 def target_exists(target, target_list):
@@ -17,7 +17,10 @@ def target_exists(target, target_list):
 
 
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(2, cv2.CAP_DSHOW)
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
     target_list = []
     while (True):
         ret, img = cap.read()
