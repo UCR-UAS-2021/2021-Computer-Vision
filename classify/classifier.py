@@ -5,7 +5,7 @@ import random
 import pickle
 from tqdm import tqdm
 from enum import Enum
-from ..proto.classes import *
+from proto.classes import *
 
 # from keras.models import Sequential, load_model
 # from keras.layers import BatchNormalization, Conv2d, MaxPooling2D, Activation, Flatten, Dropout, Dense
