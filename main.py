@@ -1,10 +1,10 @@
 import cv2
-from cv.detection import detector
-from cv.detection.preprocessing.blur import blur_image
-from cv.detection.preprocessing.bitmap import find_edge
-from cv.detection.preprocessing.bitmap import morphology
-from cv.detection.preprocessing.contour import find_contours
-from cv.classify import classifier
+from detection import detector
+from detection.preprocessing.blur import blur_image
+from detection.preprocessing.bitmap import find_edge
+from detection.preprocessing.bitmap import morphology
+from detection.preprocessing.contour import find_contours
+from classify import classifier
 
 
 def target_exists(target, target_list):
@@ -17,11 +17,15 @@ def target_exists(target, target_list):
 
 
 if __name__ == "__main__":
-    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+
+    # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
     target_list = []
     while (True):
-        ret, img = cap.read()
-        #img = cv2.imread('./data/images/0.png')
+        # ret, img = cap.read()
+        img = cv2.imread('./data/images/1.png')
+        draw_img = img
 
         contour_list = detector.detect_targets(img)
         img_list = []
@@ -31,19 +35,19 @@ if __name__ == "__main__":
             curr_target = classifier.classify_target(image, contour)
             if not target_exists(curr_target, target_list):
                 target_list.append(curr_target)
-        process = blur_image(img)
-        process = find_edge(process)
-        process = morphology(process)
-        process = find_contours(process, img)
         # Display the resulting frame
-        cv2.imshow('contours', img)
+        # cv2.imshow('bruh', img)
+        # cv2.imshow('contours', draw_img)
+        # cv2.imshow('binary', morph)
         # for i in target_list:
         #     i.print()
-        print(len(target_list))
+        # print(target_list[0].shape)
         # cv2.imshow('morphology', morph)
+        for image in range(len(img_list)):
+            cv2.imshow(str(image), img_list[image])
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     # When everything done, release the capture
-    cap.release()
+    # cap.release()
     cv2.destroyAllWindows()
