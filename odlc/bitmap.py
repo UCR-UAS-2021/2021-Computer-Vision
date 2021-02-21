@@ -8,19 +8,23 @@ def find_edge(img):
     return cv2.Canny(img, high_thresh//2, high_thresh)
 
 
-def morphology(img):
+def morphology(img, it):
     kernel = np.ones((3, 3))
-    return cv2.dilate(img, kernel, iterations=1)
+    return cv2.dilate(img, kernel, iterations=it)
     # return img
 
 def floodfill(img):
     im_floodfill = img.copy()
-    im_floodfill = morphology(im_floodfill)
+    im_floodfill = morphology(im_floodfill, 4)
 
     h, w = img.shape[:2]
     mask = np.zeros((h+2, w+2), np.uint8)
 
     cv2.floodFill(im_floodfill, mask, (0, 0), 255)
+    cv2.floodFill(im_floodfill, mask, (img.shape[1]-1, img.shape[0]-1), 255)
+    cv2.floodFill(im_floodfill, mask, (img.shape[1]-1, 0), 255)
+    cv2.floodFill(im_floodfill, mask, (0, img.shape[0]-1), 255)
     inv = cv2.bitwise_not(im_floodfill)
     im_out = img | inv
+    im_out = morphology(im_out, 2)
     return im_out
