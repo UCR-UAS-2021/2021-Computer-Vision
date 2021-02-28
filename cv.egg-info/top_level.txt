@@ -1,7 +1,0 @@
-argument_parse
-classify
-communication
-detection
-mapping
-model
-proto

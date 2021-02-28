@@ -8,10 +8,11 @@ data/Images
 data/Image Data
 data/Targets
 data/Target Data
-.venv/*
+.venv/
 .vscode
 .DS_Store
 .idea/workspace.xml
 *.xml
 *.pyc
 *.pyc
+*.egg-info/
