@@ -15,15 +15,18 @@ def morphology(img, it):
 
 def floodfill(img):
     im_floodfill = img.copy()
-    im_floodfill = morphology(im_floodfill, 4)
+    im_floodfill = morphology(im_floodfill, 2)
 
     h, w = img.shape[:2]
     mask = np.zeros((h+2, w+2), np.uint8)
-
     cv2.floodFill(im_floodfill, mask, (0, 0), 255)
     cv2.floodFill(im_floodfill, mask, (img.shape[1]-1, img.shape[0]-1), 255)
     cv2.floodFill(im_floodfill, mask, (img.shape[1]-1, 0), 255)
     cv2.floodFill(im_floodfill, mask, (0, img.shape[0]-1), 255)
+    cv2.floodFill(im_floodfill, mask, (0, img.shape[0] //2), 255)
+    cv2.floodFill(im_floodfill, mask, (img.shape[1]-1, img.shape[0]//2), 255)
+    cv2.floodFill(im_floodfill, mask, (img.shape[1]//2, img.shape[0] - 1), 255)
+    cv2.floodFill(im_floodfill, mask, (img.shape[1]//2, 0), 255)
     inv = cv2.bitwise_not(im_floodfill)
     im_out = img | inv
     im_out = morphology(im_out, 2)
