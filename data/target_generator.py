@@ -62,12 +62,12 @@ def write_target_image_and_json(file_number: str, image: np.ndarray):
     target = make_random_target(image.shape[0], image.shape[1])
     target_img = write_target_to_im(target, image)
     json_string = target.make_target_only_json()
-    if not os.path.exists('data/Targets'):
-        os.makedirs('data/Targets')
-    if not os.path.exists('data/Target Data'):
-        os.makedirs('data/Target Data')
-    cv2.imwrite('data/Targets/' + file_number + '.png', target_img * 255.)
-    json_file = open('data/Target Data/' + file_number + '.json', 'w')
+    if not os.path.exists('./Targets'):
+        os.makedirs('./Targets')
+    if not os.path.exists('./Target Data'):
+        os.makedirs('./Target Data')
+    cv2.imwrite('./Targets/' + file_number + '.png', target_img * 255.)
+    json_file = open('./Target Data/' + file_number + '.json', 'w')
     json_file.write(json_string)
     json_file.close()
 
@@ -76,8 +76,8 @@ if __name__ == '__main__':
     params = parse_target()
     num_targets = params.num_targets
     for i in tqdm(range(0, num_targets)):
-        file_dir = os.listdir('data/background images')
-        file_name = 'data/background images/' + random.choice(file_dir)
+        file_dir = os.listdir('./background images')
+        file_name = './background images/' + random.choice(file_dir)
         img = cv2.imread(file_name)
         write_target_image_and_json(str(i), img)
     # from target_gen import create_target_image

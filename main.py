@@ -25,7 +25,6 @@ if __name__ == "__main__":
         # ret, img = cap.read()
         img = cv2.imread('./data/images/4.png')
         draw_img = img.copy()
-
         contour_list, contours = detector.detect_targets(img)
         img_list = []
         for i in contour_list:
