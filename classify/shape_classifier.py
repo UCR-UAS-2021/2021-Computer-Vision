@@ -13,6 +13,7 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.preprocessing.image import img_to_array
 from tensorflow.keras import backend as K
 from tqdm import tqdm
+import imutils
 
 class Shape(Enum):
     Circle = 1
@@ -44,9 +45,12 @@ def create_training_data(img_path, json_path, img_size):
 
     for img in tqdm(os.listdir(img_path)):
         image = cv2.imread(os.path.join(img_path, img))
-        image = cv2.resize(image, (img_size, img_size))
-        image = img_to_array(image)
-        data.append(image)
+
+        for angle in np.arrange(0, 360, 45):
+            rotatedImage = imutils.rotate(image, angle)
+            rotatedImage = cv2.resize(rotatedImage, (img_size, img_size))
+            rotatedImage = img_to_array(rotatedImage)
+            data.append(rotatedImage)
 
         json_file_path = img[0:-4] + '.json'
 
