@@ -15,4 +15,4 @@ data/Target Data
 *.xml
 *.pyc
 *.pyc
-cv.egg-info/
+*.egg-info/
