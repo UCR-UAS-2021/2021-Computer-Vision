@@ -22,7 +22,7 @@ def find_contours(img, draw):
                                'h': h,
                                'index': i
                                })
-        draw = cv2.drawContours(draw, contours, i, (0, 255, 0), 3)
+        # draw = cv2.drawContours(draw, contours, i, (0, 255, 0), 3)
         # cv2.rectangle(orig_img, (x, y), (x + w, y + h), (0, 255, 0), 2)
         # center = (x, y)
         # print(center)
