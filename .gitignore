@@ -8,6 +8,7 @@ data/Images
 data/Image Data
 data/Targets
 data/Target Data
+cropped_images/
 .venv/
 .vscode
 .DS_Store
