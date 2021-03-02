@@ -13,7 +13,7 @@ def find_contours(img, draw):
         radius = cv2.arcLength(contours[i], True) / (2 * pi)
         area = pi * (radius ** 2)
         contour_area = cv2.contourArea(contours[i])
-        if contour_area <= 200 or contour_area >= 2500 or w > h * 1.5 or w < h / 1.5 \
+        if contour_area <= 350 or contour_area >= 2500 or w > h * 1.5 or w < h / 1.5 \
                 or area > contour_area * 3:
             continue
         valid_contours.append({'x': x,
