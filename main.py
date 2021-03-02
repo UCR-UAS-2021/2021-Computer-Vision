@@ -1,4 +1,5 @@
 import cv2
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from odlc import detector
@@ -20,6 +21,8 @@ if __name__ == "__main__":
 
     # cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
     # cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
+    if not os.path.exists('./cropped_images'):
+        os.makedirs('./cropped_images')
     target_list = []
     while (True):
         # ret, img = cap.read()
@@ -35,8 +38,12 @@ if __name__ == "__main__":
             if not target_exists(curr_target, target_list):
                 target_list.append(curr_target)
         # print(target_list[0].shape.name)
-        cv2.imshow('please', img)
-        print(contour_list)
+        cv2.imshow('img', img)
+
+        for i in range(len(img_list)):
+            cv2.imshow('img no. ' + str(i), img_list[i])
+            cv2.imwrite('./cropped_images/' + str(i) + '.png', img_list[i])
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
