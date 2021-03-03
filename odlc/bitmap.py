@@ -33,5 +33,4 @@ def floodfill(img, subdiv):
     inv = cv2.bitwise_not(im_floodfill)
     im_out = img | inv
     im_out = morphology(im_out, 2)
-    cv2.imshow('morph', im_out)
     return im_out
