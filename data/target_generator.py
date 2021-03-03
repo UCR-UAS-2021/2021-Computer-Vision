@@ -6,10 +6,38 @@ import os
 from json import dumps
 from proto import *
 from target_gen import create_target_image
-from image_generator import make_random_target
 from argument_parser import parse_target
 from tqdm import tqdm
 # TODO: Fix outer border for some shape-rotation combination; some of the longer shapes are getting corners cut off
+
+
+def make_random_target(image_height, image_width):
+    alphanum = random.choice(list(Alphanum))
+    shape = random.choice(list(Shape))
+    alphanum_color = random.choice(list(Color))
+    shape_color = random.choice(list(Color))
+    scale = random.randint(5, 10)
+    width = int(image_width * (scale / 100.))
+    percent_width = width / image_width
+    height = int(image_height * (scale / 100.))
+    percent_height = height / image_height
+    while alphanum_color == shape_color:
+        shape_color = random.choice(list(Color))
+    x = (random.uniform(width, float(image_width - width * 1.6))) / float(image_width - width)
+    y = (random.uniform(height, float(image_height - height * 1.6))) / float(image_height - height)
+    rotation = random.randint(-22, 22)
+
+    return Target(alphanumeric=alphanum,
+                  shape=shape,
+                  alphanumeric_color=alphanum_color,
+                  shape_color=shape_color,
+                  posx=x,
+                  posy=y,
+                  scale=scale,
+                  rotation=rotation,
+                  height=percent_height,
+                  width=percent_width
+                  )
 
 
 def write_target_to_im(target: Target, im: np.ndarray):
