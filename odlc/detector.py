@@ -10,6 +10,6 @@ def detect_targets(img):
     # cv2.imshow('blur', process)
     process = find_edge(process)
     # cv2.imshow('edge', process)
-    process = floodfill(process)
+    process = floodfill(process, 16)
     # cv2.imshow('morph', process)
     return find_contours(process, img)
