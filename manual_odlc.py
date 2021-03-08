@@ -8,23 +8,16 @@ window = Tk()
 window.title("Tkinter Window")
 window.configure(bg = "black")
 
+#initialize a left and right column
 leftframe = Frame(window)
 leftframe.pack(side = LEFT)
 leftframe.configure(bg = "black")
 
 rightframe = Frame(window)
 rightframe.pack(side = RIGHT, anchor = W)
-#configure all widgets of the gui
-"""window.grid_columnconfigure(0, weight=1)
-window.grid_columnconfigure(1, weight=1)
-window.grid_rowconfigure(0, weight=1)
-window.grid_rowconfigure(1, weight=1)
-window.grid_rowconfigure(2, weight=1)
-window.grid_rowconfigure(3, weight=1)
-window.grid_rowconfigure(4, weight=1)
-window.grid_rowconfigure(5, weight=1)
-window.grid_rowconfigure(6, weight=1)
-"""
+
+
+
 
 Label (leftframe, text = "Enter the shape:", bg = "black", fg = "white", font = "none 10 bold").pack()
 shape = StringVar()
@@ -71,6 +64,8 @@ canvas.configure(bg = "black")
 canvas.pack(fill = BOTH)
 canvas.create_image(0, 0, anchor = NW, image=img)
 
+
+#click function updates target_json.json when SUBMIT button is pressed.
 def click():
     
     if(shape.get() == "Circle"):
