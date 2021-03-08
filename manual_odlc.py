@@ -8,8 +8,14 @@ window = Tk()
 window.title("Tkinter Window")
 window.configure(bg = "black")
 
+leftframe = Frame(window)
+leftframe.pack(side = LEFT)
+leftframe.configure(bg = "black")
+
+rightframe = Frame(window)
+rightframe.pack(side = RIGHT, anchor = W)
 #configure all widgets of the gui
-window.grid_columnconfigure(0, weight=1)
+"""window.grid_columnconfigure(0, weight=1)
 window.grid_columnconfigure(1, weight=1)
 window.grid_rowconfigure(0, weight=1)
 window.grid_rowconfigure(1, weight=1)
@@ -18,53 +24,52 @@ window.grid_rowconfigure(3, weight=1)
 window.grid_rowconfigure(4, weight=1)
 window.grid_rowconfigure(5, weight=1)
 window.grid_rowconfigure(6, weight=1)
+"""
 
-
-Label (window, text = "Enter the shape:", bg = "black", fg = "white", font = "none 10 bold").grid(row = 0, column = 0, sticky=N+S+W+E)
-
+Label (leftframe, text = "Enter the shape:", bg = "black", fg = "white", font = "none 10 bold").pack()
 shape = StringVar()
-shape_entry = OptionMenu(window, shape, "Circle", "Semicircle", "Quarter_Circle", "Triangle", "Square", "Rectangle","Trapezoid", "Pentagon", "Hexagon", "Heptagon", "Octagon", "Star", "Cross"
+shape_entry = OptionMenu( rightframe, shape, "Circle", "Semicircle", "Quarter_Circle", "Triangle", "Square", "Rectangle","Trapezoid", "Pentagon", "Hexagon", "Heptagon", "Octagon", "Star", "Cross"
 )
-shape_entry.grid(row = 0, column = 1)
+shape_entry.configure(anchor = N) 
+shape_entry.pack()
 
 
-Label (window, text = "Enter the shape color:", bg = "black", fg = "white", font = "none 10 bold").grid(row = 1, column = 0, sticky=N+S+W+E)
+Label (leftframe, text = "Enter the shape color:", bg = "black", fg = "white", font = "none 10 bold").pack()
 
 shape_color = StringVar()
-shape_color_entry = OptionMenu(window, shape_color, "White", "Black", "Gray", "Red", "Blue", "Green", "Yellow", "Purple", "Brown", "Orange"
+shape_color_entry = OptionMenu(rightframe, shape_color, "White", "Black", "Gray", "Red", "Blue", "Green", "Yellow", "Purple", "Brown", "Orange"
 )
-shape_color_entry.grid(row = 1, column = 1)
+shape_color_entry.pack()
 
 
-Label (window, text = "Enter the character:", bg = "black", fg = "white", font = "none 10 bold").grid(row = 2, column = 0)
-
+Label (leftframe, text = "Enter the character:", bg = "black", fg = "white", font = "none 10 bold").pack()
 alphanum = StringVar()
-alphanum_entry = OptionMenu(window, alphanum, *Alphanum
+alphanum_entry = OptionMenu(rightframe, alphanum, *Alphanum
 )
-alphanum_entry.grid(row = 2, column = 1)
+alphanum_entry.pack()
 
 
-Label (window, text = "Enter the character color:", bg = "black", fg = "white", font = "none 10 bold").grid(row = 3, column = 0)
+Label (leftframe, text = "Enter the character color:", bg = "black", fg = "white", font = "none 10 bold").pack()
 
 alphanum_color = StringVar()
-alphanum_color_entry = OptionMenu(window, alphanum_color, "White", "Black", "Gray", "Red", "Blue", "Green", "Yellow", "Purple", "Brown", "Orange"
+alphanum_color_entry = OptionMenu(rightframe, alphanum_color, "White", "Black", "Gray", "Red", "Blue", "Green", "Yellow", "Purple", "Brown", "Orange"
 )
-alphanum_color_entry.grid(row = 3, column = 1)
+alphanum_color_entry.pack()
 
 
-Label (window, text = "Enter the rotation in degrees", bg = "black", fg = "white", font = "none 10 bold").grid(row = 4, column = 0)
+Label (leftframe, text = "Enter the rotation in degrees", bg = "black", fg = "white", font = "none 10 bold").pack()
 
-rotation_entry = Entry(window, width = 5, bg = "white")
-rotation_entry.grid(row = 4, column = 1)
+rotation_entry = Entry(rightframe, width = 5, bg = "white")
+rotation_entry.pack()
 
 
 #CHANGE IMG_0602.JPG to whatever images are needed to be opened
-image = ImageTk.PhotoImage(Image.open("IMG_0602.JPG"))
+img = ImageTk.PhotoImage(Image.open("IMG_0602.JPG"))
 
-canvas = Canvas(window)
-canvas.grid(row = 5, column = 0)
-canvas.create_image(20, 20,  image=image)
-
+canvas = Canvas(leftframe, width = 500, height = 500)
+canvas.configure(bg = "black")
+canvas.pack(fill = BOTH)
+canvas.create_image(0, 0, anchor = NW, image=img)
 
 def click():
     
@@ -147,7 +152,6 @@ def click():
                   shape_color=shape_color_choice,
                   posx=0,
                   posy=0,
-                  scale=0,
                   rotation=rotation,
                   height=0,
                   width=0)
@@ -165,7 +169,8 @@ def click():
     
 
 #creates submit button
-Button(window, text = "Submit", width = 5, command = click) .grid(row = 5, column = 1)
+Button(rightframe, text = "Submit", width = 5, command = click) .pack()
 
 
 window.mainloop()
+
