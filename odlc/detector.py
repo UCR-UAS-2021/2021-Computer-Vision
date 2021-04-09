@@ -6,6 +6,7 @@ from odlc.contour import find_contours
 
 
 def detect_targets(img):
+    process = img.copy()
     process = blur_image(img)
     # cv2.imshow('blur', process)
     process = find_edge(process)

@@ -1,11 +1,7 @@
 import cv2
 import os, shutil
 from tqdm import tqdm
-import numpy as np
-import matplotlib.pyplot as plt
 from odlc import detector
-from odlc.classify import classifier
-from sklearn.cluster import KMeans
 
 images_path = './cropped_images'
 source_path = './data/Images'
@@ -38,6 +34,6 @@ def odlc_from_dir(file_path, img_path):
 if __name__ == "__main__":
     if os.path.exists(images_path):
         shutil.rmtree(images_path)
-
     os.makedirs(images_path)
     odlc_from_dir(source_path, images_path)
+    cv2.destroyAllWindows()
