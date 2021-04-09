@@ -13,3 +13,4 @@ cropped_images_data/
 *.xml
 *.pyc
 *.egg-info/
+scratch.py
