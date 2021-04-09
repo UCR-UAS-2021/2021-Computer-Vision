@@ -1,19 +1,15 @@
-
-notebooks/alphanum_classifier.model
-notebooks/shape_classifier.model
-training_data/bounding_box_X.pickle
-training_data/bounding_box_y.pickle
-notebooks/bounding_box.model/variables/variables.data-00000-of-00001
+notebooks/
+training_data/
 data/Images
 data/Image Data
 data/Targets
 data/Target Data
 cropped_images/
+cropped_images_data/
 .venv/
 .vscode
 .DS_Store
 .idea/workspace.xml
 *.xml
-*.pyc
 *.pyc
 *.egg-info/
