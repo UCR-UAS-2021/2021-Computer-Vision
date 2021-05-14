@@ -5,6 +5,33 @@ import os
 import json
 
 
+class image_list:
+    def __init__(self,
+                 img_index: int,
+                 img_dir: str,
+                 os_list: list,
+                 ):
+        self.img_index = img_index
+        self.img_dir = img_dir
+        self.os_list = os_list
+
+    def make_filename(self):
+        return os.path.join(self.img_dir, self.os_list[self.img_index])
+
+    def get_img_name(self):
+        return self.os_list[self.img_index][:-4]
+
+    def change_index(self, increment):
+        self.img_index = (self.img_index + increment) % len(self.os_list)
+
+    def update_os_list(self):
+        self.os_list = os.listdir(self.img_dir)
+
+    def remove_curr_img(self):
+        self.os_list.remove(self.os_list[self.img_index])
+
+
+img_list = image_list(0, './cropped_images', os.listdir('./cropped_images'))
 # creates main window
 window = Tk()
 window.title("Tkinter Window")
@@ -20,6 +47,9 @@ left_frame.configure(bg="gray")
 right_frame = Frame(window)
 right_frame.pack(side=RIGHT, anchor = W)
 
+filename = StringVar()
+filename.set('Current image: ' + img_list.get_img_name())
+filename_label = Label(left_frame, textvariable=filename, bg='gray', fg='white', font='none 10 bold').grid(row=0, column=0)
 
 shape_label = Label(left_frame, text="Shape", bg="gray", fg="white", font="none 10 bold").grid(row=3, column=0)
 shape = StringVar()
@@ -59,10 +89,7 @@ rotation_entry.grid(row=7, column=1, sticky="ew")
 
 # CHANGE IMG_0602.JPG to whatever images are needed to be opened
 
-img_index = 0
-img_dir = "./cropped_images"
-os_list = os.listdir(img_dir)
-img = ImageTk.PhotoImage(Image.open(os.path.join(img_dir, os_list[img_index])))
+img = ImageTk.PhotoImage(Image.open(img_list.make_filename()))
 
 panel = Label(right_frame, image=img)
 panel.pack(side="left", fill="both", expand="yes")
@@ -74,7 +101,7 @@ panel.pack(side="left", fill="both", expand="yes")
 
 
 # click function updates target_json.json when SUBMIT button is pressed.
-def submit_click(index, directory, panel):
+def submit_click(img_list, panel):
 
     shape_choice = Shape[shape.get()]
 
@@ -95,7 +122,7 @@ def submit_click(index, directory, panel):
     json_string = my_target.make_target_only_json()
 
     # Our json file takes the name 'target_json.json
-    json_file = open('cropped_images_data/' + os.listdir(directory)[index][:-4] + '.json', 'w')
+    json_file = open('cropped_images_data/' + img_list.get_img_name() + '.json', 'w')
     json_file.write(json_string)
     json_file.close()
 
@@ -105,27 +132,26 @@ def submit_click(index, directory, panel):
     alphanum.set('')
     alphanum_color.set('')
     rotation.set('')
-    change_img(img_index, img_dir, panel, 1)
+    img_list.remove_curr_img()
+    change_img(img_list, panel, 1)
 
 
 
-def change_img(index, directory, panel, increment):
-    global img_index
-    index += increment
-    file_list = os.listdir(directory)
-    img_index = index % len(file_list)
-    img = ImageTk.PhotoImage(Image.open(os.path.join(directory, file_list[img_index])))
+def change_img(img_list, panel, increment):
+    img_list.change_index(increment)
+    filename.set('Current image: ' + img_list.get_img_name())
+    img = ImageTk.PhotoImage(Image.open(img_list.make_filename()))
     panel.configure(image=img)
     panel.image = img
     panel.pack(side="left", fill="both", expand="yes")
 
 
 # TODO: Figure out passing in parameters here
-Button(left_frame, text="Submit", width=5, command=lambda *args: submit_click(img_index, img_dir, panel)).grid(row=8, column=1)
+Button(left_frame, text="Submit", width=5, command=lambda *args: submit_click(img_list, panel)).grid(row=8, column=1)
 
-Button(left_frame, text="Left", width=5, command=lambda *args: change_img(img_index, img_dir, panel, -1)).grid(row=8, column=0)
+Button(left_frame, text="Left", width=5, command=lambda *args: change_img(img_list, panel, -1)).grid(row=8, column=0)
 
-Button(left_frame, text="Right", width=5, command=lambda *args: change_img(img_index, img_dir, panel, 1)).grid(row=8, column=2)
+Button(left_frame, text="Right", width=5, command=lambda *args: change_img(img_list, panel, 1)).grid(row=8, column=2)
 
 
 if __name__ == "__main__":
