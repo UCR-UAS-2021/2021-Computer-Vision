@@ -36,22 +36,22 @@ img_list = image_list(0, './cropped_images', os.listdir('./cropped_images'))
 window = Tk()
 window.title("Tkinter Window")
 window.geometry("400x300")
-window.configure(bg="gray")
+window.configure(bg="#1e2233")
 
 # initialize a left and right column
 left_frame = Frame(window)
 left_frame.pack(side=LEFT)
 left_frame.columnconfigure((0, 1), weight=1)
-left_frame.configure(bg="gray")
+left_frame.configure(bg="#1e2233")
 
 right_frame = Frame(window)
 right_frame.pack(side=RIGHT, anchor = W)
 
 filename = StringVar()
 filename.set('Current image: ' + img_list.get_img_name())
-filename_label = Label(left_frame, textvariable=filename, bg='gray', fg='white', font='none 10 bold').grid(row=0, column=0)
+filename_label = Label(left_frame, textvariable=filename, bg='#1e2233', fg='white', font='none 10 bold').grid(row=0, column=0)
 
-shape_label = Label(left_frame, text="Shape", bg="gray", fg="white", font="none 10 bold").grid(row=3, column=0)
+shape_label = Label(left_frame, text="Shape", bg="#101320", fg="white", font="none 10 bold").grid(row=3, column=0)
 shape = StringVar()
 shape_entry = OptionMenu(left_frame, shape, "Circle", "Semicircle", "Quarter_Circle", "Triangle", "Square", "Rectangle",
                          "Trapezoid", "Pentagon", "Hexagon", "Heptagon", "Octagon", "Star", "Cross")
@@ -59,7 +59,7 @@ shape_entry.configure(anchor=N)
 shape_entry.grid(row=3, column=1, sticky="ew")
 
 
-shape_color_label = Label(left_frame, text="Shape Color", bg="gray", fg="white", font="none 10 bold").grid(row=4, column=0)
+shape_color_label = Label(left_frame, text="Shape Color", bg="#1e2233", fg="white", font="none 10 bold").grid(row=4, column=0)
 
 shape_color = StringVar()
 shape_color_entry = OptionMenu(left_frame, shape_color, "White", "Black", "Gray", "Red", "Blue", "Green", "Yellow",
@@ -67,13 +67,13 @@ shape_color_entry = OptionMenu(left_frame, shape_color, "White", "Black", "Gray"
 shape_color_entry.grid(row=4, column=1, sticky="ew")
 
 
-alphanum_label = Label(left_frame, text="Alphanum", bg="gray", fg="white", font="none 10 bold").grid(row=5, column=0)
+alphanum_label = Label(left_frame, text="Alphanum", bg="#1e2233", fg="white", font="none 10 bold").grid(row=5, column=0)
 alphanum = StringVar()
 alphanum_entry = OptionMenu(left_frame, alphanum, *Alphanum)
 alphanum_entry.grid(row=5, column=1, sticky="ew")
 
 
-alpha_color_label = Label(left_frame, text="Alphanum Color", bg="gray", fg="white", font="none 10 bold").grid(row=6, column=0)
+alpha_color_label = Label(left_frame, text="Alphanum Color", bg="#1e2233", fg="white", font="none 10 bold").grid(row=6, column=0)
 
 alphanum_color = StringVar()
 alphanum_color_entry = OptionMenu(left_frame, alphanum_color, "White", "Black", "Gray", "Red", "Blue", "Green", "Yellow",
@@ -81,7 +81,7 @@ alphanum_color_entry = OptionMenu(left_frame, alphanum_color, "White", "Black", 
 alphanum_color_entry.grid(row=6, column=1, sticky="ew")
 
 
-rotation_label = Label(left_frame, text="Rotation", bg="gray", fg="white", font="none 10 bold").grid(row=7, column=0)
+rotation_label = Label(left_frame, text="Rotation", bg="#1e2233", fg="white", font="none 10 bold").grid(row=7, column=0)
 rotation = StringVar()
 rotation_entry = OptionMenu(left_frame, rotation, "N", "NE", "E", "SE", "S", "SW", "W", "NW")
 rotation_entry.grid(row=7, column=1, sticky="ew")
@@ -147,11 +147,11 @@ def change_img(img_list, panel, increment):
 
 
 # TODO: Figure out passing in parameters here
-Button(left_frame, text="Submit", width=5, command=lambda *args: submit_click(img_list, panel)).grid(row=8, column=1)
+Button(left_frame, text="Submit", width=5, command=lambda *args: submit_click(img_list, panel), bg='#1e2233', fg='white').grid(row=8, column=1)
 
-Button(left_frame, text="Left", width=5, command=lambda *args: change_img(img_list, panel, -1)).grid(row=8, column=0)
+Button(left_frame, text="Left", width=5, command=lambda *args: change_img(img_list, panel, -1), bg='#1e2233', fg='white').grid(row=8, column=0)
 
-Button(left_frame, text="Right", width=5, command=lambda *args: change_img(img_list, panel, 1)).grid(row=8, column=2)
+Button(left_frame, text="Right", width=5, command=lambda *args: change_img(img_list, panel, 1), bg='#1e2233', fg='white').grid(row=8, column=2)
 
 
 if __name__ == "__main__":
