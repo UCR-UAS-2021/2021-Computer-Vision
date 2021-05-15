@@ -51,7 +51,7 @@ filename = StringVar()
 filename.set('Current image: ' + img_list.get_img_name())
 filename_label = Label(left_frame, textvariable=filename, bg='#1e2233', fg='white', font='none 10 bold').grid(row=0, column=0)
 
-shape_label = Label(left_frame, text="Shape", bg="#101320", fg="white", font="none 10 bold").grid(row=3, column=0)
+shape_label = Label(left_frame, text="Shape", bg="#1e2233", fg="white", font="none 10 bold").grid(row=3, column=0)
 shape = StringVar()
 shape_entry = OptionMenu(left_frame, shape, "Circle", "Semicircle", "Quarter_Circle", "Triangle", "Square", "Rectangle",
                          "Trapezoid", "Pentagon", "Hexagon", "Heptagon", "Octagon", "Star", "Cross")
@@ -146,7 +146,6 @@ def change_img(img_list, panel, increment):
     panel.pack(side="left", fill="both", expand="yes")
 
 
-# TODO: Figure out passing in parameters here
 Button(left_frame, text="Submit", width=5, command=lambda *args: submit_click(img_list, panel), bg='#1e2233', fg='white').grid(row=8, column=1)
 
 Button(left_frame, text="Left", width=5, command=lambda *args: change_img(img_list, panel, -1), bg='#1e2233', fg='white').grid(row=8, column=0)
