@@ -29,7 +29,7 @@ def find_contours(img, draw):
         # cv2.imshow('contour ' + str(center), img[y:y + h, x:x + h])
 
     cv2.imshow("Contours", cp)
-    cv2.waitKey()
+    # cv2.waitKey()
 
     return valid_contours, contours
 

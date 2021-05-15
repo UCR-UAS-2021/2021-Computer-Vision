@@ -6,6 +6,7 @@ from odlc import detector
 images_path = './cropped_images'
 source_path = './data/Images'
 
+cap = cv2.VideoCapture(0)
 
 def target_exists(target, target_list):
     for i in target_list:
@@ -35,5 +36,10 @@ if __name__ == "__main__":
     if os.path.exists(images_path):
         shutil.rmtree(images_path)
     os.makedirs(images_path)
-    odlc_from_dir(source_path, images_path)
+    while True:
+        ret, frame = cap.read()
+        cont = detector.detect_targets(frame)
+        cv2.imshow('frame', frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
     cv2.destroyAllWindows()
