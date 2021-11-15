@@ -14,3 +14,4 @@ cropped_images_data/
 *.pyc
 *.egg-info/
 scratch.py
+.idea/*
