@@ -5,6 +5,8 @@ from odlc import detector
 
 images_path = './cropped_images'
 source_path = './data/Images'
+# images_path = '../2021-Image-Generator/Images'
+# source_path = '../2021-Image-Generator/Image Data'
 
 
 def target_exists(target, target_list):
