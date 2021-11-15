@@ -30,7 +30,7 @@ def odlc_from_dir(file_path, img_path):
     file_list = []
     for img in tqdm(os.listdir(file_path)):
         image = cv2.imread(os.path.join(file_path, img))
-        contour_list, contours = detector.detect_targets(image)
+        contour_list, contours, _ = detector.detect_targets(image)
         cnt = 0
         for i in contour_list:
             img_list.append(image[i['y']:i['y']+i['h'], i['x']:i['x']+i['w']])
@@ -49,8 +49,7 @@ def odlc_from_webcam():
     target_list = []
     while (True):
         ret, img = cap.read()
-        draw_img = img.copy()
-        contour_list, contours = detector.detect_targets(img)
+        contour_list, contours, draw_img = detector.detect_targets(img)
         img_list = []
         for i in contour_list:
             img_list.append(img[i['y']:i['y']+i['h'], i['x']:i['x']+i['w']])
@@ -60,7 +59,7 @@ def odlc_from_webcam():
             # if not target_exists(curr_target, target_list):
             #     target_list.append(curr_target)
         # print(target_list[0].shape.name)
-        cv2.imshow('img', img)
+        cv2.imshow('img', draw_img)
 
         # for i in range(len(img_list)):
         for i, image in enumerate(img_list):

@@ -28,5 +28,5 @@ def find_contours(img, draw):
         # print(center)
         # cv2.imshow('contour ' + str(center), img[y:y + h, x:x + h])
 
-    return valid_contours, contours
+    return valid_contours, contours, cp
 
