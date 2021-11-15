@@ -2,6 +2,7 @@ import cv2
 import os, shutil
 from tqdm import tqdm
 from odlc import detector
+from argument_parser import *
 
 images_path = './cropped_images'
 source_path = './data/Images'
@@ -19,6 +20,12 @@ def target_exists(target, target_list):
 
 
 def odlc_from_dir(file_path, img_path):
+
+    if os.path.exists(images_path):
+        shutil.rmtree(images_path)
+
+    os.makedirs(images_path)
+
     img_list = []
     file_list = []
     for img in tqdm(os.listdir(file_path)):
@@ -31,11 +38,49 @@ def odlc_from_dir(file_path, img_path):
             cnt += 1
     for i in range(len(img_list)):
         cv2.imwrite(img_path + '/' + file_list[i] + '.png', img_list[i])
+    cv2.destroyAllWindows()
+
+
+def odlc_from_webcam():
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1000)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1000)
+    target_list = []
+    while (True):
+        ret, img = cap.read()
+        draw_img = img.copy()
+        contour_list, contours = detector.detect_targets(img)
+        img_list = []
+        for i in contour_list:
+            img_list.append(img[i['y']:i['y']+i['h'], i['x']:i['x']+i['w']])
+
+        # for image, contour in zip(img_list, contour_list):
+            # curr_target = classifier.classify_target(image, contour)
+            # if not target_exists(curr_target, target_list):
+            #     target_list.append(curr_target)
+        # print(target_list[0].shape.name)
+        cv2.imshow('img', img)
+
+        # for i in range(len(img_list)):
+        for i, image in enumerate(img_list):
+            x = 400 // min(image.shape[0], image.shape[1])
+            cv2.imshow('img no. ' + str(i), cv2.resize(image, (image.shape[1]*x, image.shape[0]*x)))
+            # cv2.imwrite('./cropped_images/' + str(i) + '.png', img_list[i])
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
 
 if __name__ == "__main__":
-    if os.path.exists(images_path):
-        shutil.rmtree(images_path)
-    os.makedirs(images_path)
-    odlc_from_dir(source_path, images_path)
-    cv2.destroyAllWindows()
+    args = parse()
+    args_str = ''.join(sys.argv)
+
+    if args_str.count('-') != 1:
+       print("Usage: 'python3 main.py -h' for help")
+       exit()
+    if args.i:
+        print(sys.argv)
+        odlc_from_dir(sys.argv[2], sys.argv[3])
+    elif args.r:
+        odlc_from_webcam()
