@@ -49,6 +49,7 @@ def odlc_from_webcam():
     target_list = []
     while (True):
         ret, img = cap.read()
+        cv2.imwrite('scratch/img.jpg', img)
         contour_list, contours, draw_img = detector.detect_targets(img)
         img_list = []
         for i in contour_list:
@@ -64,7 +65,8 @@ def odlc_from_webcam():
         # for i in range(len(img_list)):
         for i, image in enumerate(img_list):
             x = 400 // min(image.shape[0], image.shape[1])
-            cv2.imshow('img no. ' + str(i), cv2.resize(image, (image.shape[1]*x, image.shape[0]*x)))
+            cv2.imshow(f'img no. {str(i)}', cv2.resize(image, (image.shape[1]*x, image.shape[0]*x)))
+            cv2.imwrite(f'scratch/img no. {str(i)}.jpg', cv2.resize(image, (image.shape[1]*x, image.shape[0]*x)))
             # cv2.imwrite('./cropped_images/' + str(i) + '.png', img_list[i])
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
